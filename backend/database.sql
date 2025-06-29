@@ -21,3 +21,14 @@ CREATE TABLE posts(
     time_stamps TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_time timestamp
 );
+
+CREATE TABLE comments(
+    id SERIAL PRIMARY KEY,
+    coment_text VARCHAR(255) NOT NULL,
+    fk_user_id INTEGER,
+    fk_posts_id INTEGER,
+    FOREIGN KEY (fk_user_id) REFERENCES users (id),
+    FOREIGN KEY (fk_posts_id) REFERENCES posts (id),
+    time_stamps TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time timestamp
+);

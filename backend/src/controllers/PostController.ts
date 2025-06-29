@@ -32,8 +32,10 @@ class PostController {
     }
 
     getAll = async (req: Request, res: Response) => {
-        try {
-            const allPosts = await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY id DESC');
+        try {            
+           const allPosts  = req.params.orderBy === "0" ? await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY id DESC')
+           : await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY viewscount DESC');
+            
 
             // если так делаешь, то убери passwordHash из ответа. Тут не делал. Это учебный материал.
             res.json(allPosts);
@@ -47,10 +49,10 @@ class PostController {
     }
 
     getOne = async (req: Request, res: Response) => {
-        try {         
+        try {
             await db.query('UPDATE posts set viewscount = viewscount+1  where id=$1', [req.params.id])
             const onePost = await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id WHERE posts.id=$1 ', [req.params.id]);
-            
+
             res.json(onePost);
         } catch (error) {
             console.log(error);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import store from '../redux/store';
@@ -16,21 +16,22 @@ import { CommentsBlock } from '../components/CommentsBlock';
 
 export const Home = () => {
   const dispath = useDispatch();
-  const userData = useSelector(state => state.authReduser.data)
-  const { posts, tags } = useSelector(state => state.reducerPosts)
+  const userData = useSelector(state => state.authReduser.data);
+  const { posts, tags } = useSelector(state => state.reducerPosts);
+  const [orderBy, setOrderBy] = useState(0)
 
   React.useEffect(() => {
-    dispath(fetchPosts())
+    dispath(fetchPosts(orderBy))
     dispath(fetchTags())
-  }, [])
+  }, [orderBy])
 
 
 
   return (
     <>
-      <Tabs style={{ marginBottom: 15 }} value={0} aria-label="basic tabs example">
-        <Tab label="Новые" />
-        <Tab label="Популярные" />
+      <Tabs style={{ marginBottom: 15 }} value={orderBy} aria-label="basic tabs example">
+        <Tab onClick={()=>setOrderBy(0)} label="Новые" />
+        <Tab onClick={()=>setOrderBy(1)} label="Популярные" />
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
