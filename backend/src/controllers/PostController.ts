@@ -32,10 +32,10 @@ class PostController {
     }
 
     getAll = async (req: Request, res: Response) => {
-        try {            
-           const allPosts  = req.params.orderBy === "0" ? await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY id DESC')
-           : await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY viewscount DESC');
-            
+        try {
+            const allPosts = req.params.orderBy === "0" ? await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY id DESC')
+                : await db.query('SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id ORDER BY viewscount DESC');
+
 
             // если так делаешь, то убери passwordHash из ответа. Тут не делал. Это учебный материал.
             res.json(allPosts);
@@ -96,13 +96,28 @@ class PostController {
     getLastTags = async (req: Request, res: Response) => {
         try {
             const allPosts = await db.query('SELECT * FROM posts LIMIT 5');
-            const tags = allPosts.rows.map((obj: IPosts) => obj.tags).flat().slice(0, 5)
+            const uniqueArray = allPosts.rows.map((obj: IPosts) => obj.tags).flat()
+            const tags = [...new Set(uniqueArray)].slice(0, 5)
             res.json(tags);
         } catch (error) {
             console.log(error);
 
             res.status(500).json({
                 massage: "Не удалось получить все tags",
+            })
+        }
+    }
+
+    getAllPostsOfTags = async (req: Request, res: Response) => {
+        try {
+            const tag = req.params.tag;
+            const allPosts = await db.query("SELECT posts.*, fullname, email, avatarurl FROM posts JOIN users ON posts.user_id = users.id WHERE  $1 = ANY(tags)", [tag]);
+            res.json(allPosts.rows);
+        } catch (error) {
+            console.log(error);
+
+            res.status(500).json({
+                massage: "Не удалось получить все посты по заданному Тэгу",
             })
         }
     }

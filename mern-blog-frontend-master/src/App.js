@@ -2,7 +2,7 @@ import Container from "@mui/material/Container";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Header } from "./components";
-import { Home, FullPost, Registration, AddPost, Login } from "./pages";
+import { Home, FullPost, Registration, AddPost, Login, TagsOfPosts } from "./pages";
 
 import { Routes, Route } from 'react-router-dom';
 import { useEffect } from "react";
@@ -28,6 +28,7 @@ function App() {
           <Route path="/add-post" element={<AddPost />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
+          <Route path="/tags/:tag" element={<TagsOfPosts />} />
         </Routes>
       </Container>
     </>

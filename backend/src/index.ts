@@ -56,9 +56,10 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 //валидацию провожу в контроллере
 const postController = new PostController();
 app.get('/tags', postController.getLastTags);
-app.get('/posts/:orderBy', postController.getAll);
-// app.get('/posts/tags', postController.getLastTags);
+app.get('/tags/:tag', postController.getAllPostsOfTags);
 
+app.get('/posts/sort/:orderBy', postController.getAll);
+// app.get('/posts/tags', postController.getLastTags);
 app.get('/posts/:id', postController.getOne);
 app.post('/posts', checkAuth, zodValid, postController.create);
 app.delete('/posts/:id', checkAuth, postController.remove);

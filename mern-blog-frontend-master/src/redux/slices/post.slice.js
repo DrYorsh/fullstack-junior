@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../axios';
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (orderBy) => {
-    const { data } = await axios.get(`/posts/${orderBy}`);
+    const { data } = await axios.get(`/posts/sort/${orderBy}`);
     return data
 })
 
@@ -16,6 +16,12 @@ export const fetchRemoveTags = createAsyncThunk('posts/fetchRemoveTags', async (
     return data
 })
 
+export const fetchTagsOfPosts = createAsyncThunk('posts/fetchTagsOfPosts', async (params) => {
+    const { data } = await axios.get(`/tags/${params}`);
+    return data
+})
+
+
 const initialState = {
     posts: {
         items: [],
@@ -23,7 +29,8 @@ const initialState = {
     },
     tags: {
         items: [],
-        status: 'loading'
+        status: 'loading',
+        ofPosts: []
     },
 }
 
@@ -70,7 +77,24 @@ export const postSlice = createSlice({
         // Удаление поста
         [fetchRemoveTags.pending]: (state, action) => {
             state.posts.items = state.posts.items.filter((obj) => obj.id !== action.meta.arg)
-        }
+        },
+
+        // Список постов по Тегам
+        [fetchTagsOfPosts.pending]: (state) => {
+            state.tags.status = 'loading';
+        },
+        [fetchTagsOfPosts.fulfilled]: (state, action) => {
+            state.tags = {
+                ofPosts: action.payload,
+                status: 'loaded'
+            }
+        },
+        [fetchTagsOfPosts.rejected]: (state) => {
+            state.tags = {
+                ofPosts: [],
+                status: 'error'
+            }
+        },
     }
 })
 
