@@ -13,25 +13,26 @@ import axios from '../axios';
 import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
+import { fetchComments } from '../redux/slices/comm.slice';
 
 export const Home = () => {
   const dispath = useDispatch();
   const userData = useSelector(state => state.authReduser.data);
   const { posts, tags } = useSelector(state => state.reducerPosts);
+  const { comments } = useSelector(state => state.commReduser);
   const [orderBy, setOrderBy] = useState(0)
 
   React.useEffect(() => {
     dispath(fetchPosts(orderBy))
-    dispath(fetchTags())
+    dispath(fetchTags());
+    dispath(fetchComments())
   }, [orderBy])
-
-
 
   return (
     <>
       <Tabs style={{ marginBottom: 15 }} value={orderBy} aria-label="basic tabs example">
-        <Tab onClick={()=>setOrderBy(0)} label="Новые" />
-        <Tab onClick={()=>setOrderBy(1)} label="Популярные" />
+        <Tab onClick={() => setOrderBy(0)} label="Новые" />
+        <Tab onClick={() => setOrderBy(1)} label="Популярные" />
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
@@ -58,23 +59,8 @@ export const Home = () => {
         <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={posts.status === 'loading'} />
           <CommentsBlock
-            items={[
-              {
-                user: {
-                  fullName: 'Вася Пупкин',
-                  avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-                },
-                text: 'Это тестовый комментарий',
-              },
-              {
-                user: {
-                  fullName: 'Иван Иванов',
-                  avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
-                },
-                text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
-              },
-            ]}
-            isLoading={false}
+            items={comments.status === "loaded" ? comments.items.slice(0, 3) : []}
+            isLoading={comments.status === "loading"}
           />
         </Grid>
       </Grid>

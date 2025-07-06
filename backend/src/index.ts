@@ -2,8 +2,8 @@ import express from 'express';
 import multer from 'multer';
 import cors from 'cors';
 import { registerValidation, loginValidation } from './validations/validations.users'
-import { UserController, PostController } from './controllers/index';
-import { expressValid, zodValid, checkAuth } from './utils/index';
+import { UserController, PostController, CommentController } from './controllers/index';
+import { expressValid, zodValid, checkAuth, zodCommentsValid } from './utils/index';
 
 
 const PORT = 8000;
@@ -65,6 +65,15 @@ app.post('/posts', checkAuth, zodValid, postController.create);
 app.delete('/posts/:id', checkAuth, postController.remove);
 app.patch('/posts/:id', checkAuth, zodValid, postController.update);
 
+
+
+const commentsController = new CommentController();
+app.get('/comments', commentsController.getAll);
+app.get('/comments/:id', commentsController.getOne);
+app.post('/comments', checkAuth, zodCommentsValid, commentsController.create);
+
+// app.delete('/posts/:id', checkAuth, postController.remove);
+// app.patch('/posts/:id', checkAuth, zodValid, postController.update);
 
 app.listen(PORT, () => {
     console.log("express starting on port 8000");
