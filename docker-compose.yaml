@@ -1,0 +1,40 @@
+networks:
+  dev:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - dev
+  backend:
+    build: 
+      context: ./backend
+    networks:
+      - dev
+  frontend:
+    build: 
+      context: ./mern-blog-frontend-master
+    networks:
+      - dev
+  db:
+    restart: always
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: post205077
+      POSTGRES_DB: db_fullstack_junior
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    ports:
+      - 5432:5432
+    networks:
+      - dev
