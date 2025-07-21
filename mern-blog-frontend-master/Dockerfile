@@ -10,7 +10,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build ./frontend/build /usr/share/nginx/html                          
+COPY --from=build ./mern-blog-frontend-master/build /usr/share/nginx/html                          
 COPY --from=build ./nginx.conf /etc/nginx/conf.d/defualt.conf
 
 EXPOSE 3000
