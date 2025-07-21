@@ -10,7 +10,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build ./build /user/share/nginx/html
+COPY --from=build ./build /usr/share/nginx/html                          
 COPY --from=build nginx.conf /etc/nginx/conf.d/defualt.conf
 
 EXPOSE 3000
