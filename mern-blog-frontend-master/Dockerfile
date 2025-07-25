@@ -12,8 +12,8 @@ RUN npm run build
 FROM nginx:stable-alpine
 
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
-COPY --from=builder nginx.conf /etc/nginx/conf.d/defualt.conf
+COPY --from=builder /usr/src/app/nginx.conf /etc/nginx/conf.d/defualt.conf
 
 EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]https://github.com/DrYorsh/fullstack-junior.git
