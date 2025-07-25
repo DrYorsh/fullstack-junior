@@ -16,4 +16,4 @@ COPY --from=builder /usr/src/app/nginx.conf /etc/nginx/conf.d/defualt.conf
 
 EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]https://github.com/DrYorsh/fullstack-junior.git
+CMD ["nginx", "-g", "daemon off;"]
