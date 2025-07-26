@@ -11,12 +11,12 @@ const app = express();
 app.use(express.json());
 
 var corsOptions = {
-  origin: ['http://localhost:3000', 'http://compitplus.ru/'],
+  origin: "http://localhost:3000",
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));
 
-app.use('/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static('uploads'));
 
 // Для работы с картинками, создаем хранилище, где они будут храниться
 const storage = multer.diskStorage({
@@ -30,17 +30,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-app.get('/', (req, res) => {
+app.get('/api/', (req, res) => {
     res.send("Hello World!")
 });
 
 //делаю с помощью функций контроллер
 //валидацию провожу в мидллваре
-app.post('/auth/login', loginValidation, UserController.login);
-app.post('/auth/register', registerValidation, expressValid, UserController.register);
-app.get('/auth/me', checkAuth, UserController.getMe);
+app.post('/api/auth/login', loginValidation, UserController.login);
+app.post('/api/auth/register', registerValidation, expressValid, UserController.register);
+app.get('/api/auth/me', checkAuth, UserController.getMe);
 
-app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+app.post('/api/upload', checkAuth, upload.single('image'), (req, res) => {
 
     let filedata = req.file;
     if (!filedata)
@@ -55,22 +55,22 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 //делаю с помощью класса контроллер (не забыть создать объект класса)
 //валидацию провожу в контроллере
 const postController = new PostController();
-app.get('/tags', postController.getLastTags);
-app.get('/tags/:tag', postController.getAllPostsOfTags);
+app.get('/api/tags', postController.getLastTags);
+app.get('/api/tags/:tag', postController.getAllPostsOfTags);
 
-app.get('/posts/sort/:orderBy', postController.getAll);
+app.get('/api/posts/sort/:orderBy', postController.getAll);
 // app.get('/posts/tags', postController.getLastTags);
-app.get('/posts/:id', postController.getOne);
-app.post('/posts', checkAuth, zodValid, postController.create);
-app.delete('/posts/:id', checkAuth, postController.remove);
-app.patch('/posts/:id', checkAuth, zodValid, postController.update);
+app.get('/api/posts/:id', postController.getOne);
+app.post('/api/posts', checkAuth, zodValid, postController.create);
+app.delete('/api/posts/:id', checkAuth, postController.remove);
+app.patch('/api/posts/:id', checkAuth, zodValid, postController.update);
 
 
 
 const commentsController = new CommentController();
-app.get('/comments', commentsController.getAll);
-app.get('/comments/:id', commentsController.getOne);
-app.post('/comments', checkAuth, zodCommentsValid, commentsController.create);
+app.get('/api/comments', commentsController.getAll);
+app.get('/api/comments/:id', commentsController.getOne);
+app.post('/api/comments', checkAuth, zodCommentsValid, commentsController.create);
 
 // app.delete('/posts/:id', checkAuth, postController.remove);
 // app.patch('/posts/:id', checkAuth, zodValid, postController.update);

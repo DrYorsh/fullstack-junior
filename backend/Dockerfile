@@ -9,6 +9,5 @@ RUN yarn install
 COPY . .
 
 EXPOSE 8000
-EXPOSE 5432
 
 CMD [ "yarn", "dev" ]
