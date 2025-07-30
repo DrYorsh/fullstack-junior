@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 var corsOptions = {
-  origin: "http://compitplus.ru",
+  origin: ["http://compitplus.ru", "http://localhost:8080"],
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));

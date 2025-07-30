@@ -1,32 +1,38 @@
 networks:
   dev:
 
+
 services:
   nginx:
     image: nginx:stable-alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:8080"
+      # - "443:443"
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
     depends_on:
       - backend
       - frontend
+      - db
     networks:
       - dev
   backend:
-    build: 
+    build:
       context: ./backend
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - dev
   frontend:
-    build: 
+    build:
       context: ./mern-blog-frontend-master
     networks:
       - dev
   db:
+    image: postgres:latest
     restart: always
-    image: postgres:17.5
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: post205077
@@ -35,6 +41,12 @@ services:
       - ./pgdata:/var/lib/postgresql/data
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
     ports:
-      - 5432:5432
+      - "5432:5432"
+    tty: true
+    stdin_open: true
     networks:
       - dev
+
+volumes:
+  pgdata:
+    driver: local

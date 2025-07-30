@@ -18,11 +18,10 @@ type IPosts = {
 class PostController {
     create = async (req: RequestCustom, res: Response) => {
         try {
-            // const newPost = await db.query('INSERT INTO posts (title, content, tags, imageUrl, user_id) values ($1, $2, $3, $4, $5) RETURNING *',
-            //     [req.body.title, req.body.content, req.body.tags, req.body.imageUrl, req.userId]);
+            const newPost = await db.query('INSERT INTO posts (title, content, tags, imageUrl, user_id) values ($1, $2, $3, $4, $5) RETURNING *',
+                [req.body.title, req.body.content, req.body.tags, req.body.imageUrl, req.userId]);
 
-            // res.json(newPost);
-            res.send('hi')
+            res.json(newPost);
         } catch (error) {
             console.log(error);
 

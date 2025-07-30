@@ -34,7 +34,7 @@ export const AddPost = () => {
         imageUrl: imageUrl ? `http://localhost:8000${imageUrl}` : ''
       }
 
-      const { data } = isEdited ? await axios.patch(`/posts/${id}`, filds) :  await axios.post('/posts', filds);
+      const { data } = isEdited ? await axios.patch(`/posts/${id}`, filds) : await axios.post('/posts', filds);
       const _id = isEdited ? id : data.rows[0].id;
       navigate(`/posts/${_id}`)
     } catch (error) {
