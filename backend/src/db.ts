@@ -8,9 +8,6 @@ const pool = new Pool({
     database: "db_fullstack_junior"
 });
 
-// pool.on('connect', (client) => {
-//   client.query('SET DATESTYLE = iso, mdy')
-// })
 
 export default pool;
 
