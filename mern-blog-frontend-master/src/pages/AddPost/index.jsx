@@ -31,7 +31,7 @@ export const AddPost = () => {
         title,
         content,
         tags: arrayTags,
-        imageUrl: imageUrl ? `http://localhost:8000${imageUrl}` : ''
+        imageUrl: imageUrl ? `http://compitplus.ru${imageUrl}` : ''
       }
 
       const { data } = isEdited ? await axios.patch(`/posts/${id}`, filds) : await axios.post('/posts', filds);
