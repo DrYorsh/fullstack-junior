@@ -16,30 +16,32 @@ export const FullPost = () => {
 
   const { id } = useParams();
 
-  useEffect(() => {
+ useEffect(() => {
+    // юзефект не может быть ассинхронной, поэтому оборачиваем в отдельную функцию и в конце вызываем ее.
+    const loadOrders = async () => {
+      await axios
+        .get(`/posts/${id}`)
+        .then((res) => {
+          setData(res.data.rows[0]);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.warn(err);
+          alert('Ошибка при получении статьи')
+        })
 
-    axios
-      .get(`/posts/${id}`)
-      .then((res) => {
-        setData(res.data.rows[0]);
-        setIsLoading(false);
-
-      })
-      .catch(err => {
-        console.warn(err);
-        alert('Ошибка при получении статьи')
-      })
-
-    axios
-      .get(`/comments/${id}`)
-      .then((res) => {
-        setComm(res.data.rows);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.warn(err);
-        alert('Ошибка при получении комментариев')
-      })
+      await axios
+        .get(`/comments/${id}`)
+        .then((res) => {
+          setComm(res.data.rows);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.warn(err);
+          alert('Ошибка при получении комментариев')
+        })
+    }
+    loadOrders()
   }, [comments.items])
 
   if (isLoading) {
@@ -69,7 +71,7 @@ export const FullPost = () => {
         items={isLoading ? [] : comm}
         isLoading={isLoading}
       >
-        <Index urlAvatar={aboutMe.avatarurl} idPost={id} />
+        <Index urlAvatar={aboutMe?.avatarurl} idPost={id} />
       </CommentsBlock>
     </>
   );

@@ -27,8 +27,8 @@ CREATE TABLE comments(
     coment_text VARCHAR(255) NOT NULL,
     fk_user_id INTEGER,
     fk_posts_id INTEGER,
-    FOREIGN KEY (fk_user_id) REFERENCES users (id),
-    FOREIGN KEY (fk_posts_id) REFERENCES posts (id),
+    FOREIGN KEY (fk_user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (fk_posts_id) REFERENCES posts (id) ON DELETE CASCADE,
     time_stamps TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_time timestamp
 );
