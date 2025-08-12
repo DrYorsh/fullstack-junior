@@ -40,11 +40,12 @@ services:
       - dev
   db:
     image: postgres:latest
+    env_file: .env
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: post205077
-      POSTGRES_DB: db_fullstack_junior
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
